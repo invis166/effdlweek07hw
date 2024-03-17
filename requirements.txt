@@ -1,0 +1,10 @@
+torch==1.13.0
+torchvision==0.14.0
+grpcio-tools
+grpcio
+Flask==2.0.2
+grequests
+aiohttp
+furl
+gunicorn==20.1.0
+prometheus-flask-exporter==0.18.7
