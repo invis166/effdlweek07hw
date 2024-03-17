@@ -3,6 +3,7 @@ import io
 import logging
 from concurrent import futures
 
+import torch
 import requests
 import grpc
 import torchvision.transforms as transforms
@@ -14,6 +15,8 @@ import inference_pb2_grpc
 
 
 INFENRENCE_API_PORT = os.environ['INFERENCE_API_PORT']
+
+THRESHOLD = 0.75
 
 
 transform_pipeline = transforms.Compose([
@@ -40,8 +43,10 @@ class InferenceDetector(inference_pb2_grpc.InstanceDetector):
     def Predict(self, request, context):
         url = request.url
         image = get_image_from_url(url)
-	with torch.no_grad():
-		object_idx = self.model(image)[0]['labels']
+        with torch.no_grad():
+                model_out = self.model(image)[0]
+        scores = model_out['scores']
+        object_idx = model_out['labels'][(scores > THRESHOLD).nonzero().flatten()]
         object_names = [self.categories[idx] for idx in object_idx]
 
         return inference_pb2.InstanceDetectorOutput(objects=object_names)

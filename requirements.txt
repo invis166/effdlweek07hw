@@ -8,3 +8,4 @@ aiohttp
 furl
 gunicorn==20.1.0
 prometheus-flask-exporter==0.18.7
+pytest

@@ -1,3 +1,4 @@
+import json
 import os
 
 import grpc
@@ -29,7 +30,9 @@ def predict():
             url=url
         ))
 
-    return MessageToJson(resp)
+    message = MessageToJson(resp)
+
+    return json.loads(message) or {'objects': []}
 
 
 if __name__ == '__main__':
