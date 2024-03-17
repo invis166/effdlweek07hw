@@ -21,7 +21,7 @@ metrics = PrometheusMetrics(app)
 
 @app.route("/predict", methods=['POST'])
 @metrics.gauge("api_in_progress", "requests in progress")
-@metrics.counter("api_invocations_total", "number of invocations")
+@metrics.counter("app_http_inference_count", "number of invocations")
 def predict():
     url = request.get_json(force=True)['url']
     with grpc.insecure_channel(f'{INFERENCE_API_HOST}:{INFERENCE_API_PORT}') as channel:
