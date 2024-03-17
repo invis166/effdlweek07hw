@@ -18,18 +18,13 @@ INFENRENCE_API_PORT = os.environ['INFERENCE_API_PORT']
 
 THRESHOLD = 0.75
 
-
-transform_pipeline = transforms.Compose([
-    transforms.Resize(224),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
+transforms = MaskRCNN_ResNet50_FPN_Weights.COCO_V1.transforms()
 
 
 def get_image_from_url(url: str):
     resp = requests.get(url)
     image = Image.open(io.BytesIO(resp.content))
-    img_data = transform_pipeline(image).unsqueeze(0)
+    img_data = transforms(image).unsqueeze(0)
 
     return img_data
 
